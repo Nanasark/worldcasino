@@ -11,28 +11,36 @@ export default function HomeScreen() {
 
       <main className="flex-grow p-4">
         <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Featured Games</h2>
+          <h2 className="text-xl font-semibold mb-4 text-yellow-600">
+            Featured Games
+          </h2>
           <div className="grid grid-cols-2 gap-4">
             <Link
               href="/mystery-boxes"
               className="bg-white rounded-lg shadow p-4 flex flex-col items-center"
             >
               <Gift size={32} className="text-blue-500 mb-2" />
-              <span className="text-sm font-medium">Mystery Boxes</span>
+              <span className="text-sm font-medium text-blue-600">
+                Mystery Boxes
+              </span>
             </Link>
             <Link
               href="/raffles"
               className="bg-white rounded-lg shadow p-4 flex flex-col items-center"
             >
               <Ticket size={32} className="text-green-500 mb-2" />
-              <span className="text-sm font-medium">Raffles</span>
+              <span className="text-sm font-medium text-green-600">
+                Raffles
+              </span>
             </Link>
             <Link
               href="/games"
               className="bg-white rounded-lg shadow p-4 flex flex-col items-center"
             >
               <Gamepad2 size={32} className="text-purple-500 mb-2" />
-              <span className="text-sm font-medium">Mini Games</span>
+              <span className="text-sm font-medium text-purple-600">
+                Mini Games
+              </span>
             </Link>
           </div>
         </section>
@@ -40,8 +48,8 @@ export default function HomeScreen() {
         <section>
           <h2 className="text-xl font-semibold mb-4">Recent Winners</h2>
           <div className="bg-white rounded-lg shadow p-4">
-            <ul className="space-y-2">
-              <li className="flex items-center justify-between">
+            <ul className="space-y-2 text-gray-700">
+              <li className="flex items-center justify-between ">
                 <span>John D.</span>
                 <span className="text-green-500">$500</span>
               </li>
