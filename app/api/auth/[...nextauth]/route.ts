@@ -26,13 +26,12 @@ const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user }) {
+      console.log("SignIn callback user:", user);
       return true;
     },
   },
-  debug: process.env.NODE_ENV === "development",
+  debug: true,
 };
 
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
-
-
