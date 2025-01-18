@@ -1,3 +1,5 @@
+"use client";
+
 import VerifyBtn from "@/components/button/Verify";
 import { SignInBtn } from "@/components/button/SignIn";
 import { useSignIn } from "@/hooks/useSignIn";
