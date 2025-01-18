@@ -26,12 +26,23 @@ const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user }) {
-      console.log("SignIn callback user:", user);
-      return true;
+      // You can skip database insertions if you're not using a DB like Supabase
+      return true; // User can always sign in successfully
+    },
+    session: ({ session, user }) => {
+      // Instead of using JWT, the user ID can be attached directly to the session.
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user?.id, // Directly using user from the session callback
+        },
+      };
     },
   },
   debug: true,
 };
+
 
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
