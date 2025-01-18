@@ -1,9 +1,12 @@
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
 
-
 export const SignIn = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
+  console.log("Session Data:", session); // Debugging session data
+  console.log("Session Status:", status); // Debugging session status
+
   if (session) {
     return (
       <div className="text-center p-4">
@@ -22,9 +25,9 @@ export const SignIn = () => {
         <p className="mb-4">Not signed in</p>
         <button
           className="bg-black text-white rounded-[15px] px-4 py-2 ring-2 ring-white hover:bg-gray-800 focus:outline-none focus:ring-4"
-          onClick={() => signIn()}
+          onClick={() => signIn("worldcoin")}
         >
-          Sign in
+          Sign in with Worldcoin
         </button>
       </div>
     );
