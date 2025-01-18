@@ -33,7 +33,7 @@ export default function RootLayout({
               <main className="flex-grow overflow-y-auto pb-16">
                 {children}
               </main>
-              
+              <BottomNav />
             </MiniKitProvider>
           </ErudaProvider>
         </NextAuthProvider>
