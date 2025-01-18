@@ -4,6 +4,7 @@ import VerifyBtn from "@/components/button/Verify";
 import { SignInBtn } from "@/components/button/SignIn";
 import { useSignIn } from "@/hooks/useSignIn";
 import HomeScreen from "@/components/screens/Home";
+import BottomNav from "@/components/bottomNav";
 export default function Home() {
   const { handleSignIn, handleSignOut, session, status } = useSignIn();
   if (status === "loading") {
@@ -26,5 +27,10 @@ export default function Home() {
   }
 
   // If the user is signed in, show the homepage
-  return <HomeScreen />;
+  return (
+    <>
+      <HomeScreen />
+      <BottomNav />
+    </>
+  );
 }
