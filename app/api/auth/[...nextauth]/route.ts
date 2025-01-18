@@ -26,8 +26,13 @@ const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user }) {
-      // You can skip database insertions if you're not using a DB like Supabase
-      return true; // User can always sign in successfully
+      try {
+        // Custom logic to check if user exists in the DB or something else
+        return true;
+      } catch (error) {
+        console.error("Error during sign in", error);
+        return false;
+      }
     },
     session: ({ session, user }) => {
       // Instead of using JWT, the user ID can be attached directly to the session.
