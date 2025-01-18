@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { Gift, Ticket, Gamepad2 } from "lucide-react";
 

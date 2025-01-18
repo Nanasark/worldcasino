@@ -1,3 +1,4 @@
+"use client";
 import { useSignIn } from "@/hooks/useSignIn";
 
 export function SignInBtn() {

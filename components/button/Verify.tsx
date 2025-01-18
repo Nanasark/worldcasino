@@ -1,3 +1,4 @@
+"use client";
 import { useVerify } from "@/hooks/useVerify";
 export default function VerifyBtn() {
   const { handleVerify, verifyResponse } = useVerify();
