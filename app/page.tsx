@@ -1,13 +1,28 @@
-import { PayBlock } from "@/components/Pay";
-import { SignIn } from "@/components/SignIn";
-import { VerifyBlock } from "@/components/Verify";
-
+import VerifyBtn from "@/components/button/Verify";
+import { SignInBtn } from "@/components/button/SignIn";
+import { useSignIn } from "@/hooks/useSignIn";
+import HomeScreen from "@/components/screens/Home";
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24 gap-y-3">
-      <SignIn />
-      <VerifyBlock />
-      <PayBlock />
-    </main>
-  );
+  const { handleSignIn, handleSignOut, session, status } = useSignIn();
+  if (status === "loading") {
+    // While the session status is loading, show a loading spinner or message
+    return (
+      <main className="flex min-h-screen bg-white flex-col items-center justify-center p-24">
+        <p>Loading...</p>
+      </main>
+    );
+  }
+
+  if (!session) {
+    // If there is no session, prompt the user to sign in
+    return (
+      <main className="flex min-h-screen bg-white flex-col items-center justify-center p-24">
+        <p>Please sign in to access the homepage</p>
+        <SignInBtn />
+      </main>
+    );
+  }
+
+  // If the user is signed in, show the homepage
+  return <HomeScreen />;
 }
