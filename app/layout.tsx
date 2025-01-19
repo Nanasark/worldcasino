@@ -5,6 +5,7 @@ import MiniKitProvider from "@/components/minikit-provider";
 import dynamic from "next/dynamic";
 import NextAuthProvider from "@/components/next-auth-provider";
 import BottomNav from "@/components/bottomNav";
+import { ThirdwebProvider } from "thirdweb/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,10 +31,12 @@ export default function RootLayout({
         <NextAuthProvider>
           <ErudaProvider>
             <MiniKitProvider>
+              <ThirdwebProvider>
               <main className="flex-grow overflow-y-auto pb-16">
                 {children}
               </main>
               <BottomNav />
+              </ThirdwebProvider>
             </MiniKitProvider>
           </ErudaProvider>
         </NextAuthProvider>
