@@ -5,7 +5,6 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { inAppWallet } from "thirdweb/wallets";
 import { useConnect } from "thirdweb/react";
 import { client } from "@/lib/thirdweb/client";
-
 import { Loader2 } from "lucide-react";
 
 export function LoginButton() {
@@ -78,7 +77,7 @@ export function LoginButton() {
         )}
       </button>
       {session && (
-        <button onClick={handleSignOut}  className="w-full">
+        <button onClick={handleSignOut} className="w-full">
           Sign Out
         </button>
       )}
@@ -86,4 +85,3 @@ export function LoginButton() {
     </div>
   );
 }
-
