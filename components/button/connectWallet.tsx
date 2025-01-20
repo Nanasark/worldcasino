@@ -63,6 +63,7 @@ export function ConnectWallet() {
     <div className="flex flex-col items-center gap-4">
       {session && (
         <button
+          type="button"
           onClick={handleConnectWallet}
           disabled={isConnecting}
           className="w-1/2 rounded-[20px] bg-zinc-900 text-white h-[45px]"
