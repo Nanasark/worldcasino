@@ -7,7 +7,7 @@ import { useConnect } from "thirdweb/react";
 import { client } from "@/lib/thirdweb/client";
 import { Loader2 } from "lucide-react";
 
-export function LoginButton() {
+export function ConnectWallet() {
   const { data: session, status } = useSession();
   const { connect } = useConnect();
   const [isConnecting, setIsConnecting] = useState(false);
@@ -19,20 +19,8 @@ export function LoginButton() {
 
     try {
       // Ensure the user is signed in before connecting the wallet
-      if (!session) {
-        const result = await signIn("worldcoin", { redirect: false });
 
-        if (result?.error) {
-          throw new Error(result.error);
-        }
-
-        // Wait for the session to update
-        await new Promise((resolve) => setTimeout(resolve, 5000)); // Small delay for session propagation
-      }
-
-      if (!session?.user?.name) {
-        throw new Error("Session or user information is missing.");
-      }
+      // Wait for the session to update
 
       await connect(async () => {
         const wallet = inAppWallet();
@@ -57,8 +45,6 @@ export function LoginButton() {
     await signOut();
   };
 
-  
-
   if (status === "loading") {
     return (
       <button disabled>
@@ -70,20 +56,13 @@ export function LoginButton() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      {!session ? (
+      {session && (
         <button
           onClick={handleConnectWallet}
           disabled={isConnecting}
           className="w-1/2 rounded-[20px] bg-zinc-900 text-white h-[45px]"
         >
-          Sign in with thirdweb
-        </button>
-      ) : (
-        <button
-          onClick={handleSignOut}
-          className="w-1/2 rounded-[20px] bg-zinc-900 text-white h-[45px]"
-        >
-          Sign Out
+          connect wallet
         </button>
       )}
       {error && <p className="text-red-500 text-sm">{error}</p>}

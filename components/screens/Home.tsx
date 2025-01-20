@@ -2,12 +2,14 @@
 import Link from "next/link";
 import { Gift, Ticket, Gamepad2 } from "lucide-react";
 import { LoginButton } from "../button/Login";
+import { ConnectWallet } from "../button/connectWallet";
 
 export default function HomeScreen() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <header className="bg-blue-600 text-white p-4">
         <h1 className="text-2xl font-bold">GameZone</h1>
+        <ConnectWallet />
       </header>
 
       <main className="flex-grow p-4">
