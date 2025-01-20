@@ -60,24 +60,19 @@ export function LoginButton() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <button
-        onClick={handleConnectWallet}
-        disabled={isConnecting}
-        className="w-full"
-      >
-        {isConnecting ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Connecting...
-          </>
-        ) : session ? (
-          "Connect Wallet"
-        ) : (
-          "Sign In and Connect Wallet"
-        )}
-      </button>
-      {session && (
-        <button onClick={handleSignOut} className="w-full">
+      {!session ? (
+        <button
+          onClick={handleConnectWallet}
+          disabled={isConnecting}
+          className="w-1/2 rounded-[20px] bg-zinc-900 text-white h-[45px]"
+        >
+          Sign in with thirdweb
+        </button>
+      ) : (
+        <button
+          onClick={handleSignOut}
+          className="w-1/2 rounded-[20px] bg-zinc-900 text-white h-[45px]"
+        >
           Sign Out
         </button>
       )}

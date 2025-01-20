@@ -5,6 +5,7 @@ import { SignInBtn } from "@/components/button/SignIn";
 import { useSignIn } from "@/hooks/useSignIn";
 import HomeScreen from "@/components/screens/Home";
 import BottomNav from "@/components/bottomNav";
+import { LoginButton } from "@/components/button/Login";
 export default function Home() {
   const { handleSignIn, handleSignOut, session, status } = useSignIn();
   if (status === "loading") {
@@ -22,6 +23,7 @@ export default function Home() {
       <main className="flex min-h-screen bg-white flex-col items-center justify-center p-24">
         <p>Please sign in to access the homepage</p>
         <SignInBtn />
+        <LoginButton />
       </main>
     );
   }
@@ -30,7 +32,6 @@ export default function Home() {
   return (
     <>
       <HomeScreen />
-      
     </>
   );
 }
