@@ -1,26 +1,48 @@
-import { type NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../auth/authOptions";
+import { NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  console.log(session);
-  if (!session || !session.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+// Simulated function to validate the payload (replace with actual logic)
+const validatePayload = (payload: string) => {
+  // Example validation logic
+  if (!payload || payload === "anonymous") {
+    return null;
   }
 
-  const body = await req.json();
-  const { payload } = body;
+  // Simulated user data (replace with actual database or other logic)
+  return {
+    userId: payload,
+    email: `${payload}@example.com`, // Optional email
+    exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60, // 7-day session expiration
+  };
+};
 
-  // Here you would typically verify the payload against your session or database
-  // For this example, we're just checking if it matches the user ID
-  if (payload !== session.user.id) {
-    return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+// Define the POST handler
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+
+    const { payload } = body;
+
+    if (!payload) {
+      return NextResponse.json({ error: "Missing payload" }, { status: 400 });
+    }
+
+    const user = validatePayload(payload);
+
+    if (!user) {
+      return NextResponse.json({ error: "Invalid payload" }, { status: 401 });
+    }
+
+    // Respond with the user details required by thirdweb
+    return NextResponse.json({
+      userId: user.userId,
+      email: user.email, // Optional
+      exp: user.exp, // Optional
+    });
+  } catch (error) {
+    console.error("Error validating payload:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
-
-  return NextResponse.json({
-    userId: session.user.id,
-    email: session.user.email,
-    exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60, // 7 days from now
-  });
 }
