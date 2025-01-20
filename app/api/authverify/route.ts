@@ -13,12 +13,24 @@ export async function POST(req: Request) {
     const { payload } = body;
     console.log("[authverify][debug] Extracted payload:", payload);
 
-    // Validate the payload
+    // Check if the payload is valid
     if (!payload || typeof payload !== "string") {
       console.error("[authverify][error] Invalid or missing payload:", payload);
       return NextResponse.json(
         { error: "Invalid or missing payload" },
         { status: 400 }
+      );
+    }
+
+    // Handle anonymous user (if necessary)
+    if (payload === "anonymous") {
+      console.warn("[authverify][warning] Received 'anonymous' payload.");
+      // Here you can either:
+      // a) Handle the anonymous case differently (e.g., provide a guest experience).
+      // b) Or deny the request and ask for proper authentication.
+      return NextResponse.json(
+        { error: "Authentication required" },
+        { status: 401 } // Unauthorized
       );
     }
 
