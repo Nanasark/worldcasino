@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
-import { authOption } from "../auth/[...nextauth]/route";
+import { authOptions } from "../auth/authOptions";
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOption);
+  const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
