@@ -34,15 +34,20 @@ export const authOptions: NextAuthOptions = {
         return false;
       }
     },
-    session: ({ session, user }) => {
-      // Instead of using JWT, the user ID can be attached directly to the session.
-      return {
-        ...session,
-        user: {
+    jwt: async ({ token, user }) => {
+      if (user) {
+        token.id = user.id; // Add `id` to the token
+      }
+      return token;
+    },
+    session: async ({ session, token }) => {
+      if (token) {
+        session.user = {
           ...session.user,
-          id: user?.id, // Directly using user from the session callback
-        },
-      };
+          id: token.id || "", // Add `id` to session.user
+        };
+      }
+      return session;
     },
   },
   debug: true,

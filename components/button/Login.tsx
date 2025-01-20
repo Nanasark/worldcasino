@@ -16,30 +16,30 @@ export function LoginButton() {
   const handleConnectWallet = async () => {
     setIsConnecting(true);
     setError(null);
+
     try {
-      // Sign in first if the user is not signed in
+      // Ensure the user is signed in before connecting the wallet
       if (!session) {
         const result = await signIn("worldcoin", { redirect: false });
+
         if (result?.error) {
           throw new Error(result.error);
         }
+
+        // Wait for the session to update
+        await new Promise((resolve) => setTimeout(resolve, 500)); // Small delay for session propagation
       }
 
-      // After signing in, check the session for the user's address
-      if (!session || !session.user?.name) {
-        throw new Error("You need to be logged in to connect your wallet.");
+      if (!session?.user?.name) {
+        throw new Error("Session or user information is missing.");
       }
 
-      // Use the session.user.name (Ethereum address) as the payload for wallet connection
-      const userAddress = session.user.name.slice(0, 42); // Ensure it's a valid Ethereum address
-
-      // Now connect the wallet
       await connect(async () => {
         const wallet = inAppWallet();
         await wallet.connect({
           client,
           strategy: "auth_endpoint",
-          payload: userAddress, // Send the address as the payload
+          payload: session?.user?.name ?? "nothing",
         });
         return wallet;
       });
