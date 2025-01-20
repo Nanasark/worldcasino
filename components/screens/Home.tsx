@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Gift, Ticket, Gamepad2 } from "lucide-react";
+import { LoginButton } from "../button/Login";
 
 export default function HomeScreen() {
   return (
@@ -42,6 +43,7 @@ export default function HomeScreen() {
                 Mini Games
               </span>
             </Link>
+            <LoginButton />
           </div>
         </section>
 
