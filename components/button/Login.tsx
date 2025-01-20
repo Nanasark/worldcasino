@@ -18,20 +18,22 @@ export function LoginButton() {
     setError(null);
     try {
       if (!session) {
-        // If not signed in, sign in first
+        // Sign in first if not logged in
         const result = await signIn("worldcoin", { redirect: false });
         if (result?.error) {
           throw new Error(result.error);
         }
       }
 
-      // Now connect the wallet
+      const payload = session?.user?.id || "anonymous";
+
+      // Connect the wallet
       await connect(async () => {
         const wallet = inAppWallet();
         await wallet.connect({
           client,
           strategy: "auth_endpoint",
-          payload: session?.user?.id || "anonymous", // Use session ID if available, or a placeholder
+          payload,
         });
         return wallet;
       });

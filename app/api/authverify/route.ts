@@ -1,46 +1,41 @@
 import { NextResponse } from "next/server";
 
-// Simulated function to validate the payload (replace with actual logic)
-const validatePayload = (payload: string) => {
-  // Example validation logic
-  if (!payload || payload === "anonymous") {
-    return null;
-  }
-
-  // Simulated user data (replace with actual database or other logic)
-  return {
-    userId: payload,
-    exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60, // 7-day session expiration
-  };
-};
-
-// Define the POST handler
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const body = await request.json();
+    // Parse the request body
+    const body = await req.json();
 
+    // Extract the payload (user ID)
     const { payload } = body;
 
-    if (!payload) {
-      return NextResponse.json({ error: "Missing payload" }, { status: 400 });
-    }
-
-    const user = validatePayload(payload);
-
-    if (!user) {
+    // Validate the payload
+    if (!payload || typeof payload !== "string") {
       return NextResponse.json(
-        { error: "Invalid payload", payload },
-        { status: 401 }
+        { error: "Invalid or missing payload" },
+        { status: 400 }
       );
     }
 
-    // Respond with the user details required by thirdweb
-    return NextResponse.json({
-      userId: user.userId,
-      exp: user.exp, // Optional
-    });
+    // Example: Simulated verification logic
+    // Replace this with your actual verification logic if needed
+    const isValidUser = payload.startsWith("0x"); // Example check for Ethereum-like address
+    if (!isValidUser) {
+      return NextResponse.json(
+        { error: "Invalid user ID" },
+        { status: 401 } // Unauthorized
+      );
+    }
+
+    // Response to thirdweb
+    return NextResponse.json(
+      {
+        userId: payload, // Return the same payload as the user ID
+        exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60, // 7-day session expiration
+      },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("Error validating payload:", error);
+    console.error("Verification error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
