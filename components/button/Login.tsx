@@ -27,7 +27,7 @@ export function LoginButton() {
         }
 
         // Wait for the session to update
-        await new Promise((resolve) => setTimeout(resolve, 500)); // Small delay for session propagation
+        await new Promise((resolve) => setTimeout(resolve, 5000)); // Small delay for session propagation
       }
 
       if (!session?.user?.name) {
