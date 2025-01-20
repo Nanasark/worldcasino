@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { inAppWallet } from "thirdweb/wallets";
 import { useConnect } from "thirdweb/react";
@@ -13,30 +13,39 @@ export function LoginButton() {
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    // Log the session data after it changes
+    console.log("Session updated:", session);
+  }, [session]);
+
   const handleConnectWallet = async () => {
     setIsConnecting(true);
     setError(null);
     try {
       if (!session) {
-        // Sign in first if not logged in
+        // If not signed in, sign in first
         const result = await signIn("worldcoin", { redirect: false });
         if (result?.error) {
           throw new Error(result.error);
         }
       }
 
-      const payload = session?.user?.id || "anonymous";
-
-      // Connect the wallet
-      await connect(async () => {
-        const wallet = inAppWallet();
-        await wallet.connect({
-          client,
-          strategy: "auth_endpoint",
-          payload,
+      // Now connect the wallet if session exists
+      const userName = session?.user?.name ?? "anonymous"; // Fallback to "anonymous" if name is undefined or null
+      if (userName !== "anonymous") {
+        console.log("Connecting wallet with user name:", userName);
+        await connect(async () => {
+          const wallet = inAppWallet();
+          await wallet.connect({
+            client,
+            strategy: "auth_endpoint",
+            payload: userName, // Use session name (or fallback) here
+          });
+          return wallet;
         });
-        return wallet;
-      });
+      } else {
+        setError("You need to be logged in to connect your wallet.");
+      }
     } catch (error) {
       console.error("Failed to connect wallet:", error);
       setError(
@@ -77,6 +86,11 @@ export function LoginButton() {
         >
           Sign Out
         </button>
+      )}
+      {session?.user?.name && (
+        <p className="text-sm text-gray-500">
+          Welcome, {session.user.name.slice(0, 10)}
+        </p>
       )}
       {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>

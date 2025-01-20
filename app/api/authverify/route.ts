@@ -1,67 +1,53 @@
-import { NextResponse } from "next/server";
+// app/api/authverify/route.ts
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    // Log incoming request
-    console.log("[authverify][debug] Incoming request:", req);
+    // Parse the incoming JSON body
+    const { payload } = await req.json();
 
-    // Parse the request body
-    const body = await req.json();
-    console.log("[authverify][debug] Parsed body:", body);
+    // Log the payload to check the value
+    console.log("[authverify][debug] Parsed body:", { payload });
 
-    // Extract the payload (user ID)
-    const { payload } = body;
-    console.log("[authverify][debug] Extracted payload:", payload);
-
-    // Check if the payload is valid
-    if (!payload || typeof payload !== "string") {
-      console.error("[authverify][error] Invalid or missing payload:", payload);
+    // Check if the payload is a valid string (if it's not, respond with error)
+    if (!payload || typeof payload !== "string" || payload.trim() === "") {
+      console.warn("[authverify][warning] Invalid payload received:", {
+        payload,
+      });
       return NextResponse.json(
-        { error: "Invalid or missing payload" },
+        { error: "Invalid or missing user ID" },
         { status: 400 }
       );
     }
 
-    // Handle anonymous user (if necessary)
+    // Log the extracted payload for debugging
+    console.log("[authverify][debug] Extracted payload:", payload);
+
+    // If the payload is "anonymous", reject the request
     if (payload === "anonymous") {
       console.warn("[authverify][warning] Received 'anonymous' payload.");
-      // Here you can either:
-      // a) Handle the anonymous case differently (e.g., provide a guest experience).
-      // b) Or deny the request and ask for proper authentication.
       return NextResponse.json(
-        { error: "Authentication required" },
-        { status: 401 } // Unauthorized
+        { error: "Anonymous user cannot be verified" },
+        { status: 401 }
       );
     }
 
-    // Example: Simulated verification logic
-    const isValidUser = payload.startsWith("0x"); // Example check for Ethereum-like address
-    if (!isValidUser) {
-      console.error("[authverify][error] Invalid user ID:", payload);
-      return NextResponse.json(
-        { error: "Invalid user ID" },
-        { status: 401 } // Unauthorized
-      );
-    }
+    // At this point, we know we have a valid user ID
+    console.log("[authverify][debug] Verifying user with ID:", payload);
 
-    // Log successful validation
-    console.log("[authverify][debug] User ID validated:", payload);
+    // Here you could add your actual user verification logic, such as checking a database
+    // or another service to verify the user ID.
 
-    // Response to thirdweb with userId and expiration time (7 days)
-    const response = {
-      userId: payload, // Return the same payload as the user ID
-      exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60, // 7-day session expiration
-    };
-    console.log("[authverify][debug] Returning response:", response);
-
-    return NextResponse.json(response, { status: 200 });
-  } catch (error) {
-    // Log the error
-    console.error("[authverify][error] Verification error:", error);
-
-    // Return a generic internal server error
+    // Example of a successful response
     return NextResponse.json(
-      { error: "Internal server error" },
+      { message: "User verified successfully", userId: payload },
+      { status: 200 }
+    );
+  } catch (error) {
+    // Handle any unexpected errors and log them
+    console.error("[authverify][error] Unexpected error:", error);
+    return NextResponse.json(
+      { error: "An unexpected error occurred during verification" },
       { status: 500 }
     );
   }
