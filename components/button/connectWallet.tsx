@@ -1,5 +1,5 @@
 "use client";
-
+import { useActiveAccount } from "thirdweb/react";
 import { useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { inAppWallet } from "thirdweb/wallets";
@@ -8,6 +8,11 @@ import { client } from "@/lib/thirdweb/client";
 import { Loader2 } from "lucide-react";
 
 export function ConnectWallet() {
+  const account = useActiveAccount();
+  let address;
+  if (account) {
+    address = account.address;
+  }
   const { data: session, status } = useSession();
   const { connect } = useConnect();
   const [isConnecting, setIsConnecting] = useState(false);
@@ -65,7 +70,7 @@ export function ConnectWallet() {
           connect wallet
         </button>
       )}
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {address}
     </div>
   );
 }
